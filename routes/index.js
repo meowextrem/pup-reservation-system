@@ -9,7 +9,9 @@ router.get('/', function(req, res, next) {
   res.redirect('/login')
 })
 
-
+router.get('/asd', function(req, res, next) {
+  res.render('./admin/user_tb_view')
+})
 
 
 router.get('/register', function(req, res, next) {
@@ -52,7 +54,53 @@ router.post('/register', function(req, res, next) {
 
 
 
+router.get('/search', function(req, res, next) {
+  console.log(req.query)
+  if (req.query.query === '') {
+    console.log('no result')
+    res.render('./user/home', {
+      layout: 'main',
+      css: '/assets/css/main_search.css',
+      login: req.isAuthenticated(),
+      query: req.query.query,
+      fromDate: req.query.fromDate,
+      toDate: req.query.toDate,
+      fromTime: req.query.fromTime,
+      toTime: req.query.toTime,
+      type: req.query.type,
+      available: req.query.available,
+      rows: req.query.rows,
+      page: req.query.page
+    })
+  } else {
+    res.render('./user/home', {
+      layout: 'main',
+      css: '/assets/css/main_search.css',
+      login: req.isAuthenticated(),
+      query: req.query.query,
+      fromDate: req.query.fromDate,
+      toDate: req.query.toDate,
+      fromTime: req.query.fromTime,
+      toTime: req.query.toTime,
+      type: req.query.type,
+      available: req.query.available,
+      rows: req.query.rows,
+      page: req.query.page
+    })
+  }
+})
 
+
+router.post('/item', function(req, res, next) {
+  console.log(req.body)
+  //query
+
+  res.render('./item_view',{
+    layout: 'main',
+    title: 'Item',
+    css: '/assets/css/item.css'
+  })
+})
 
 
 

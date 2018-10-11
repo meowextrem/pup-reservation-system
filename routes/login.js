@@ -22,7 +22,7 @@ router.post('/', passport.authenticate('local', {
   failureRedirect: '/login',
   failureFlash: 'Invalid credentials'
 }) ,function(req, res, next) {
-  res.redirect('/account')
+  res.redirect('/search')
 })
 
 

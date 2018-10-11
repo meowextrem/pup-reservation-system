@@ -1,0 +1,555 @@
+<div class="content-wrapper" background="./Profile Page of Benz_files/grid.gif">
+    <!-- Content Header (Page header) -->
+    <section class="content-header">
+      <h1>
+        {{prod_name}}
+      </h1>
+    <br>
+     <!-- <span class="btn btn-sm btn-primary pull-right" id="addUserbtn" style="margin-right:5px" onclick="showModal('delete','{{prod_id}}')">Delete Product</span> -->  
+    </section>
+
+    <!-- Main content -->
+    <section class="content">
+      <div class="row">
+        <div class="col-xs-12">
+         
+          <!-- /.box -->
+
+          <div class="box">
+            <div class="box-header">
+              <h3 class="box-title">Data Table With Full Features</h3>
+        <span class="btn btn-sm btn-primary pull-right" onclick=deleteAll("view") >Delete Selected</span>
+       <span class="btn btn-sm btn-primary pull-right" id="addUserbtn" style="margin-right:5px" onclick=addUserbtn("view")>Add</span>
+            </div>
+            <!-- /.box-header -->
+            <div class="box-body">
+      
+        <div class='col-xs-12' id="tablediv">
+        
+        </div>
+      </div>
+            <!-- /.box-body -->
+          </div>
+          <!-- /.box -->
+        </div>
+        <!-- /.col -->
+      </div>
+      <!-- /.row -->
+    </section>
+    <!-- /.content -->
+  </div>
+  
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog ">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+        <h4 class="modal-title" id='mod-title'></h4>
+      </div>
+      <div class="modal-body">
+    <div id='mod-content'>
+    </div>
+      
+    
+    
+      </div>
+      <div class="modal-footer">
+    <span class="pull-left" id="notif-mess"></span>
+        <div id="mod-footer">
+    
+    </div>
+    
+    
+      </div>
+    </div>
+
+  </div>
+</div>
+  
+<script>
+  
+var save_method; //for save method string
+var table;
+var oTable1 = null, vpage = 0, method = null, updateIdx = null, fname = null, lname = null, email = null, utype = null,password = null,userMode1 = null,userMode2 = null,user_verrified =null; 
+  var selectedArr = [];
+
+  $(function () {
+  
+  tabledivs("getData");
+  })
+  
+  function selectAll(){
+    if($("#selectAll1").is(":checked")){
+    $(".selectInvi").prop("checked",true);
+    $("#selectAll2").prop("checked",true);  
+    }
+    else {
+    $(".selectInvi").prop("checked",false);
+    $("#selectAll2").prop("checked",false); 
+    }
+  
+   
+  }
+  
+  function selectAll2(){
+      if($("#selectAll2").is(":checked")){
+    $(".selectInvi").prop("checked",true);
+    $("#selectAll1").prop("checked",true);  
+    }
+    else {
+    $(".selectInvi").prop("checked",false);
+    $("#selectAll1").prop("checked",false); 
+    }
+    
+  }
+
+  function deleteAll(var4){
+  if(var4=='view'){
+      $('#myModal').modal("show").addClass("modal-danger");  
+      $('#mod-title').html("Delete Users");
+      $('#mod-content').html('<p>Are you sure do you want to delete all selected entries?</p>');
+      $('#mod-footer').html('<button id="delUserSubmitform"  class="btn btn-primary" onclick=deleteAll("delete2") >Yes</button>'+
+      '<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>');
+      $('#notif-mess').html(' ');
+    }
+  
+  else if(var4=='delete2'){
+    if($('.selectInvi:checked').length == 0){
+    $('#notif-mess').html('No Entry Selected!');  
+    } else { 
+      $(".selectInvi:checked").each(function(){
+          selectedArr.push($(this).data('value'));  
+      });
+      actions('delUserAll');
+      $('#myModal').modal("hide");
+      tabledivs("getData");
+    }
+  }
+  }
+  
+  function delete1(var3,var4){
+  if(var4=='view'){
+      $('#myModal').modal("show").addClass("modal-danger");  
+      
+      $('#mod-title').html("Delete User");
+      $('#mod-content').html('<p>Are you sure do you want to delete this entry?</p>'+
+      '<input type="text" id="updateIdx" hidden>');
+        $('#mod-footer').html('<button id="delUserSubmitform"  class="btn btn-primary" onclick=delete1("'+var3+'","delete2") >Yes</button>'+
+      '<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>');
+      $('#updateIdx').val(var3);
+      $('#notif-mess').html(' ');
+      
+    }
+  else if(var4=='delete2'){
+    actions('delUser');
+    $('#myModal').modal("hide");
+      tabledivs("getData");
+  }
+  
+  }
+  
+  function addUserbtn(var4){
+    if(var4=='view'){
+    $('#myModal').modal("show").removeClass("modal-danger");  
+    $('#mod-title').html("Add User");
+    $('#mod-content').html('<form class="addUserform">'+
+          '<div class="form-group">'+
+                  '<label>First Name</label>'+
+                  '<input type="text" id="first_name" class="form-control" placeholder="Enter ...">'+
+          '</div>'+
+      '<div class="form-group">'+
+                  '<label>Last Name</label>'+
+                  '<input type="text" id="last_name"class="form-control" placeholder="Enter ...">'+
+            '</div>'+
+      '<div class="form-group">'+
+                  '<label>Email Address</label>'+
+                  '<input type="text" id="email"class="form-control" placeholder="Enter ...">'+
+            '</div>'+
+      '<div class="form-group">'+
+                  '<label>Password</label>'+
+                  '<input type="password" id="password" class="form-control" placeholder="Enter ...">'+
+            '</div>'+
+      '<div class="form-group">'+
+                  '<label>Verify</label>'+
+                  '<select class="form-control" id="user_verrified">'+
+                    '<option value="1">Yes</option>'+
+                    '<option value="0">No</option>'+
+                  '</select>'+
+                '</div>'+
+      '<div class="form-group">'+
+                  '<label>User Type</label>'+
+                  '<select class="form-control" id="user_type">'+
+                    '<option value="super_admin">Super Admin</option>'+
+                    '<option value="admin">Admin</option>'+
+                    '<option value="normal">Normal</option>'+
+                  '</select>'+
+                '</div>'+
+        '</form>');
+          $('#notif-mess').html(' ');
+    $('#mod-footer').html('<button id="addUserSubmitform"  class="btn btn-primary" onclick=addUserbtn("add") >Submit</button>'+
+    '<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>');
+    
+    
+    }
+    else if(var4=='add'){
+      actions('addUser');
+        $('#myModal').modal("hide");
+      tabledivs("getData");
+    }
+  }
+  
+  function update(var3,var4){
+    
+    if(var4=='view'){
+      $('#myModal').modal("show").removeClass("modal-danger");  
+      $('#mod-title').html("Update User");
+      $('#mod-content').html('<div class="form-group">'+
+                  '<label>First Name</label>'+
+                  '<input type="text" id="first_name" class="form-control" placeholder="Enter ...">'+
+          '</div>'+
+      '<div class="form-group">'+
+                  '<label>Last Name</label>'+
+                  '<input type="text" id="last_name"class="form-control" placeholder="Enter ...">'+
+            '</div>'+
+      '<div class="form-group">'+
+                  '<label>Email Address</label>'+
+                  '<input type="text" id="email" class="form-control" placeholder="Enter ...">'+
+            '</div>'+
+      '<div class="form-group">'+
+                  '<label>Password</label>'+
+                  '<input type="password" id="password" class="form-control" placeholder="Enter ...">'+
+            '</div>'+
+      '<div class="form-group">'+
+                  '<label>Verify</label>'+
+                  '<select class="form-control" id="user_verrified">'+
+                    '<option value="1">Yes</option>'+
+                    '<option value="0">No</option>'+
+                  '</select>'+
+                '</div>'+
+      '<div class="form-group">'+
+                  '<label>User Type</label>'+
+                  '<select class="form-control" id="user_type">'+
+                    '<option value="super_admin">Super Admin</option>'+
+                    '<option value="admin">Admin</option>'+
+                    '<option value="normal">Normal</option>'+
+                  '</select>'+
+                '</div>'+
+        '<input type="text" id="updateIdx" hidden>');
+        $('#mod-footer').html('<button id="uppUserSubmitform"  class="btn btn-primary" onclick=update("'+var3+'","update") >Submit</button>'+
+      '<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>');
+      $('#updateIdx').val(var3);
+      actions('getUpdatevalue');
+      $('#notif-mess').html(' ');
+      }
+    else if(var4=='update'){
+    actions('updateUser');
+    $('#myModal').modal("hide");
+      tabledivs("getData");
+    }
+    
+     //Date picker
+    // $('.form_date').datetimepicker({
+        // language:  'en',
+        // weekStart: 1,
+        // todayBtn:  1,
+    // autoclose: 1,
+    // todayHighlight: 1,
+    // startView: 2,
+    // minView: 2,
+    // forceParse: 0
+    // });
+  }
+
+  function upload(var3,var4){
+    
+    if(var4=='view'){
+      $('#myModal').modal("show").removeClass("modal-danger");  
+      $('#mod-title').html("Upload Picture");
+      $('#mod-content').html('<form id="uppImgform" enctype="multipart/form-data">'+
+        '<div class="form-group">'+
+         '<label for="exampleInputFile">Select File to upload</label>'+
+                '<input type="file" name="file" id="user_file_path" >'+
+        '<input type="submit" id="uploadImagebtn" class="hidden"> '+
+        '<input type="text" id="userID" hidden>'+
+        '</div>'+
+        '</form>'+
+          '<img id="blah" src="#" alt="your image" />'+
+        '<input type="text" id="updateIdx" hidden>');
+        $('#mod-footer').html('<button id="uppUserSubmitform"  class="btn btn-primary" onclick=upload("'+var3+'","upload") >Submit</button>'+
+      '<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>');
+      $('#updateIdx').val(var3);
+      actions('getUpdatevalue');
+      $('#notif-mess').html(' ');
+      }
+    else if(var4=='upload'){
+    actions('upload2');
+    // $('#myModal').modal("hide");
+      // tabledivs("getData");
+    }
+    
+    $("#user_file_path").change(function(){
+        readURL(this);
+    
+    
+    });
+
+   
+     //Date picker
+    // $('.form_date').datetimepicker({
+        // language:  'en',
+        // weekStart: 1,
+        // todayBtn:  1,
+    // autoclose: 1,
+    // todayHighlight: 1,
+    // startView: 2,
+    // minView: 2,
+    // forceParse: 0
+    // });
+  }
+  
+  
+  $(document).on('submit',"#uppImgform",(function(e) {
+        e.preventDefault();
+        var formData = new FormData(this); 
+    formData.append("UsersID",$("#userID").val());
+
+        $.ajax({
+            type:'POST',
+            url: "url",
+            data:formData,
+            cache:false,
+            contentType: false,
+            processData: false,
+            success:function(data){
+                console.log("success");
+                console.log(data);
+        location.reload();
+        $('#myModal').modal("hide");
+      tabledivs("getData");
+            },
+            error: function(data){
+                console.log("error");
+                console.log(data);
+            }
+        });
+    }));
+  
+  function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            
+            reader.onload = function(e) {
+                $('#blah').attr('src', e.target.result);
+            }
+            
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+  
+  
+  function actions(var2){ 
+  $.ajax({
+    url: "<?php echo site_url('users/actions')?>",
+    type: "POST",
+    data:{
+      type:var2,
+      fname:$("#first_name").val(),
+      lname:$("#last_name").val(),
+      email:$("#email").val(),
+      password:$("#password").val(),
+      user_verrified:$("#user_verrified").val(),
+      user_type:$("#user_type").val(),
+      updateIdx:$("#updateIdx").val(),
+      selectedArr:selectedArr
+      
+    },
+    success:function(data){
+      var obj = JSON.parse(data);
+      if(var2=='addUser'){
+        tabledivs();
+      reloadTable();
+      }
+      if(var2=='upload2'){
+        console.log(obj);
+        $('#userID').val(obj);
+        $('#uploadImagebtn').trigger("click");
+      }
+      if(var2=='updateUser'){
+        
+      }
+      if(var2=='getUpdatevalue'){
+          
+          $('#first_name').val(obj.first_name);
+          $('#last_name').val(obj.last_name);
+          $('#email').val(obj.email);
+          $('#password').val(obj.password);
+          $('#user_verrified').val(obj.user_verrified);
+          $('#user_type').val(obj.user_type);
+          
+      }
+      if(var2=='delUser'){
+          
+      }
+      if(var2=='delUserAll'){
+        console.log(obj);
+      }
+    }
+        });
+  }
+
+  function reloadTable(){
+    table.ajax.reload(null,false);
+  }
+ 
+ function tabledivs2(){
+   $("#tablediv2").html(
+   '<table id="example2" class="table table-bordered table-striped">'+
+    '<thead>'+
+      '<tr>'+
+        '<th>Name</th>'+  
+        '<th>Action</th>'+  
+        '<th>Action Date</th>'+
+        '<th>Time</th>'+
+        '<th>Created Time</th>'+
+      '</tr>'+
+    '</thead>'+
+    '<tbody>'+
+      
+      
+    '</tbody>'+
+    '<tfoot>'+
+      '<tr>'+
+        '<th>Name</th>'+  
+        '<th>Action</th>'+  
+        '<th>Action Date</th>'+
+        '<th>Time</th>'+
+        '<th>Created Time</th>'+
+      '</tr>'+
+    '</tfoot>'+
+   '</table>'
+   );
+  
+  table = $('#example2').DataTable({ 
+
+        "processing": true, //Feature control the processing indicator.
+        "serverSide": true, //Feature control DataTables' server-side processing mode.
+        "order": [], //Initial no order.
+
+        // Load data for the table's content from an Ajax source
+        "ajax": {
+            "url": "<?php echo site_url('loglog/getUserlist')?>",
+            "type": "POST",
+      "data": {
+      
+      "userMode1":userMode1,
+      "userMode2":userMode2 
+      }
+        },
+
+        //Set column definition initialisation properties.
+
+    });
+  
+ }   
+
+
+
+
+ 
+ function tabledivs(){
+   $("#tablediv").html(
+   '<table id="example1" class="table table-bordered table-striped">'+
+    '<thead>'+
+      '<tr>'+
+        '<th style="witdh:20px"><input id="selectAll1" onclick="selectAll()" type="checkbox" name="vehicle" value="Bike"></th>'+
+        '<th>First Name</th>'+  
+        '<th>Last Name</th>'+  
+        '<th>Email Address</th>'+
+        '<th>User Type</th>'+
+        '<th>Updated Date</th>'+
+        '<th>Created Date</th>'+
+        '<th>Verified?</th>'+
+        '<th>Options</th>'+
+      '</tr>'+
+    '</thead>'+
+    '<tbody>'+
+      
+      
+    '</tbody>'+
+    '<tfoot>'+
+      '<tr>'+
+        '<th><input id="selectAll2" onclick="selectAll2()" type="checkbox" name="vehicle" value="Bike"></th>'+
+        '<th>First Name</th>'+  
+        '<th>Last Name</th>'+  
+        '<th>Email Address</th>'+
+        '<th>User Type</th>'+
+        '<th>Updated Date</th>'+
+        '<th>Created Date</th>'+
+        '<th>Verified?</th>'+
+        '<th>Options</th>'+
+      '</tr>'+
+    '</tfoot>'+
+   '</table>'
+   );
+  
+  table = $('#example1').DataTable({ 
+
+        "processing": true, //Feature control the processing indicator.
+        "serverSide": true, //Feature control DataTables' server-side processing mode.
+        "order": [], //Initial no order.
+
+        // Load data for the table's content from an Ajax source
+        "ajax": {
+            "url": "url",
+            "type": "POST"
+        },
+
+        //Set column definition initialisation properties.
+        "columnDefs": [
+        {   
+      targets: [0,8], orderable : false, visible : true
+        },
+        ],
+
+    });
+  
+ }
+
+function selectMode(){
+    
+      userMode1 = $("#updateIdx").val();
+    userMode2 = $("#updateIdx").val();
+     console.log(userMode2);
+     tabledivs2("getData");
+  } 
+ 
+ 
+function viewLogs(var3,var4){
+    if(var4=='view'){
+      $('#myModal').modal("show").removeClass("modal-danger");  
+      $('#mod-title').html("View Logs");
+      $('#mod-content').html('<div class="form-group">'+
+        '<div id="tablediv2">'+
+        '</div>'+
+          '</div>'+
+        '<input type="text" id="updateIdx" hidden>');
+        $('#mod-footer').html('<button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>');
+      $('#updateIdx').val(var3);
+      // actions('getUpdatevalue');
+      selectMode();
+      $('#notif-mess').html(' ');
+      }
+    else if(var4=='update'){
+    actions('updateUser');
+    $('#myModal').modal("hide");
+      tabledivs("getData");
+    }
+  
+}
+ 
+ function getData(){
+  actions('getData'); }
+
+</script>

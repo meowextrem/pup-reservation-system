@@ -48,3 +48,33 @@
 .search-query:focus + button {
   z-index: 5;   
 }
+
+
+.pagination {
+  float: right;
+}
+
+.pagination a {
+  color: black;
+  padding: 8px 16px;
+  text-decoration: none;
+  transition: background-color .3s;
+  border: 1px solid #ddd;
+}
+
+
+.search-result {
+  margin-top: 6em;
+}
+
+
+.input-group {
+  width: 50.5em;
+}
+
+
+@media only screen and (max-width: 768px) {
+    .input-group {
+      width: 100%;
+    }
+}

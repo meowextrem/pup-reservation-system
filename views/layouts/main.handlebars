@@ -35,13 +35,24 @@
               <span class="icon-bar"></span>
               <span class="icon-bar"></span>                        
             </button>
-            <a class="navbar-brand" href="#">CPE RESERVATION</a>
+            <a class="navbar-brand" href="/search">CPE RESERVATION</a>
           </div>
           <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav navbar-right">
               <li><a href="/account">Home</a></li>
-              <li><a href="/rooms">Rooms</a></li>
-              <li><a href="/equipments">Equipment</a></li>
+              <li class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                  <span class="glyphicon glyphicon-th-list"></span> Categories
+                  <span class="caret"></span>
+                </a>
+                <ul class="dropdown-menu">
+                  <li><a href="/equipments">Equipments</a></li>
+                  <li><a href="/rooms">Rooms</a></li>
+                </ul>
+              </li>
+              
+              {{!-- <li><a href="/rooms">Rooms</a></li> --}}
+              {{!-- <li><a href="/equipments">Equipment</a></li> --}}
               
               {{#if login}}
               <li class="dropdown">
@@ -67,11 +78,11 @@
                           <form method="POST" action="/login">
                               <div class="form-group">
                                  <label class="sr-only" for="">Username</label>
-                                 <input type="text" name="username" class="form-control" id="" value="" placeholder="Username" required>
+                                 <input type="text" name="username" class="form-control" id="username" value="" placeholder="Username" required>
                               </div>
                               <div class="form-group">
                                 <label class="sr-only" for="">Password</label>
-                                <input type="password" name="password" class="form-control" id="" placeholder="Password" required>
+                                <input type="password" name="password" class="form-control" id="password" placeholder="Password" required>
                                 <div class="help-block text-right"><a href="/forgot">Forgot password?</a></div>
                               </div>
                               <div class="form-group">
