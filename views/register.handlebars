@@ -1,0 +1,81 @@
+<div class="container">
+  <form action="/register" method="post">
+  <div class="register-container">
+    <div class="text-center">
+      <h3>Register</h3>
+    </div>
+
+    {{#if success}}
+    <div class="alert alert-success">
+      {{{success}}}
+    </div>
+    {{/if}}
+
+    {{#if error}}
+    <div class="alert alert-danger">
+      {{{error}}}
+    </div>
+    {{/if}}
+
+    <div>
+      <div class="form-group">
+        <label>Email</label>
+        <input type="email" class="form-control" name="email">
+      </div>
+      <div class="form-group">
+        <label>First Name</label>
+        <input type="text" class="form-control" name="firstName">
+      </div>
+      <div class="form-group">
+        <label>Last Name</label>
+        <input type="text" class="form-control" name="lastName">
+      </div>
+      <div class="form-group">
+        <label>Student number</label>
+        <input type="text" class="form-control" name="studentNumber">
+      </div>
+      <div class="form-inline" style="display: inline-block; margin-right: 15px">
+        <label>Year</label>
+        <select class="form-control" name="year">
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </select>
+      </div>
+      <div class="form-inline" style="display: inline-block; margin-bottom: 15px">
+        <label>Section</label>
+        <select class="form-control" name="section">
+          <option>1</option>
+          <option>2</option>
+          <option>3</option>
+          <option>4</option>
+          <option>5</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Contact Number</label>
+        <input type="text" class="form-control" name="contactNumber">
+      </div>
+      <div class="form-group">
+        <label>Password</label>
+        <input type="password" class="form-control" name="password1">
+      </div>
+      <div class="form-group">
+        <label>Confirm Password</label>
+        <input type="password" class="form-control" name="password2">
+      </div>
+
+      <div class="form-inline  text-center">
+        <input type="submit" class="btn btn-success form-control" name="" value="Register" >
+        <input type="button" class="btn btn-danger form-control" name="" value="Clear" >
+      </div>
+      <div class="form-inline" style="margin-top: 9px">
+        <p style="display: inline-block; float: left">Already have an account? <a href="/login">Login</a></p>
+        <p style="display: inline-block; float: right"><a href="/forgot">Forgot Password?</a></p>
+      </div>
+    </div>
+  </div>
+  </form>
+</div>
