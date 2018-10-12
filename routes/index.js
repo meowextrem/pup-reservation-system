@@ -67,8 +67,8 @@ router.use('/logout', function(req, res, next) {
 
 
 router.get('/search', isLoggedIn, function(req, res, next) {
-  console.log(req.query)
-  if (req.query.query === '') {
+  // console.log(req.query)
+  if (req.query.assetsId=== '') {
     console.log('no result')
     res.render('./user/home', {
       layout: 'main',
@@ -105,17 +105,21 @@ router.get('/search', isLoggedIn, function(req, res, next) {
   }
 })
 
+router.get('/item', function(req, res, next) {
+  res.redirect('/search')
+})
 
 
-
-router.post('/item', function(req, res, next) {
-  console.log(req.body)
+router.post('/item', isLoggedIn, function(req, res, next) {
+  console.log(req.body.assetId)
   //query
-
-  res.render('./item_view',{
-    layout: 'main',
-    title: 'Item',
-    css: '/assets/css/item.css'
+  item.searchById(req.body.assetId, function(data) {
+    res.render('./item_view',{
+      layout: 'main',
+      title: 'Item',
+      css: '/assets/css/item.css',
+      itemData: data
+    })
   })
 })
 
