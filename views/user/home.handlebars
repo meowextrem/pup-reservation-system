@@ -75,6 +75,25 @@
 	  <div class="search-result">
     <form action="/item" method="post">  
 	    <div>
+        {{#each searchData}}
+          {{#if this.room_id}}
+            <div style="margin: 2em 0">
+              <h4 class="text-info">{{this.room_name}} <small class="text-muted">{{this.category_type}}</small></h4>
+              <p class="text-justify">{{this.room_desc}}</p>
+              <button type="submit" class="btn" name="assetId" value="{{this.assets_id}}">Reserve</button>
+            </div>
+          {{else}}
+            <div style="margin: 2em 0">
+              <h4 class="text-info">{{this.equipment_name}} <small class="text-muted">{{this.category_type}}</small></h4>
+              <p class="text-justify">{{this.equipment_desc}}</p>
+              <button type="submit" class="btn" name="assetId" value="{{this.assets_id}}">Reserve</button>
+            </div>
+          {{/if}}
+        {{/each}}
+
+
+
+
         <div style="margin: 2em 0">
           <h4 class="text-info">AVR <small class="text-muted">avr</small></h4>
           <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt utitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
@@ -83,16 +102,6 @@
         <div style="margin: 2em 0">
           <h4 class="text-info">AVR <small class="text-muted">avr</small></h4>
           <p class="text-justify">Lorem ipsum dolor sit ametor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-          <button type="submit" class="btn" name="assetId" value="id">Reserve</button>
-        </div>
-        <div style="margin: 2em 0">
-          <h4 class="text-info">AVR <small class="text-muted">avr</small></h4> 
-          <p class="text-justify">non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
-          <button type="submit" class="btn" name="assetId" value="id">Reserve</button>
-        </div>
-        <div>
-          <h4 class="text-info">AVR <small class="text-muted">avr</small></h4>
-          <p class="text-justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
           <button type="submit" class="btn" name="assetId" value="id">Reserve</button>
         </div>
 	    </div>

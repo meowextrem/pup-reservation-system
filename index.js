@@ -9,7 +9,7 @@ const passport = require('passport');
 const Strategy = require('passport-local').Strategy;
 const bcrypt = require('bcryptjs');
 const saltRounds = 5;
-
+const pwd = require('passwordjs')
 
 const user = require('./models/user')
 
@@ -52,7 +52,15 @@ function(username, password, done) {
       console.log('no user exists')
       return done(null, false) 
     }
-    bcrypt.compare(password, user.password).then(function(status) {
+    // bcrypt.compare(password, user.password).then(function(status) {
+    //   if (status == false) { 
+    //     console.log('incorrect password')
+    //     return done(null, false) 
+    //   }
+    //   console.log('logged in')
+    //   return done(null, user)
+    // });
+    pwd.compare('!@#$%^&*()!@#$%^&*()'+password,user.password,'md5').then(function(status) {
       if (status == false) { 
         console.log('incorrect password')
         return done(null, false) 
@@ -65,11 +73,11 @@ function(username, password, done) {
 
 
 passport.serializeUser(function(user, cb) {
-  cb(null, user.id);
+  cb(null, user.user_id);
 });
 
-passport.deserializeUser(function(id, cb) {
-  user.getById(id, function (user) {
+passport.deserializeUser(function(user_id, cb) {
+  user.getById(user_id, function (user) {
     cb(null, user);
   });
 });

@@ -4,8 +4,8 @@ const bcrypt = require('bcryptjs')
 var actions = {
   getById: (id,callback) => {
     const query = {
-      text: `Select * FROM users 
-      WHERE users.id = '${id}'`,
+      text: `Select * FROM user_tb 
+      WHERE user_id = '${id}'`,
     }
     db.query(query)
     .then(res => callback(res.rows[0]))
@@ -13,7 +13,7 @@ var actions = {
   },
   getByUsername: (username,callback) => {
     const query = {
-      text: 'SELECT * FROM users WHERE email = $1',
+      text: 'SELECT * FROM user_tb WHERE email = $1 AND user_types = `normal`',
       values: [username]
     }
     db.query(query).then(data => {
@@ -22,12 +22,16 @@ var actions = {
   },
   getByEmail: (email, callback) => {
     const query = {
-      text: 'SELECT * FROM users WHERE email = $1',
+      text: `SELECT * FROM user_tb WHERE email = $1 and user_types = 'normal' AND is_active = true`,
       values: [email]
     }
     db.query(query).then(data => {
+      // console.log(data)
       callback(data.rows[0])
-    }).catch(e => callback(e))
+    }).catch(e => {
+      console.log(e)
+      callback(e)
+    })
   },
   registerUser: (body, callback) => {
     bcrypt.hash(body.password1,5).then(hash => {

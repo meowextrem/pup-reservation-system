@@ -11,3 +11,8 @@ CREATE TABLE users(
 	created_date date DEFAULT current_date
 );
 
+
+SELECT * FROM assets_tb
+LEFT JOIN equipments_tb ON equipments_tb.equipment_id = assets_tb.equipment_id
+LEFT JOIN rooms_tb ON rooms_tb.room_id = assets_tb.room_id;
+

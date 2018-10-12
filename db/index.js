@@ -1,15 +1,16 @@
 const { Pool } = require('pg')
 
 const pool = new Pool({
-  database: 'd7nlau3oqq3mqk',
-  user: 'vwcwwdyzndfuxx',
-  password: '600defb4580a491b98cca93047bc965c57e16cdb31dbffa000639223a2cedcb8',
-  host: 'ec2-54-225-92-1.compute-1.amazonaws.com',
+  database: 'ddlnr57c8rlbil',
+  user: 'adfrqeeszkptgw',
+  password: '4ebe7f68d90c85fa496a3cc1ab40aa105b80cb221c6baa44054f2613a4ab59f0',
+  host: 'ec2-23-21-147-71.compute-1.amazonaws.com',
   port: 5432,
   ssl: true
 })
 
-//heroku pg:psql postgresql-tapered-77091 --app pupcoe-reservation-system
+//heroku pg:psql postgresql-tapered-54282 --app pup-reservation-system
+
 
 
 pool.connect().then(function() {

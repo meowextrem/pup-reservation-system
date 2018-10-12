@@ -4,6 +4,12 @@ const _ = require('lodash')
 
 const user = require('../models/user')
 
+const isLoggedIn = require('../middleware/checkLogin')
+
+const item = require('../models/item')
+
+
+
 /// redirection
 router.get('/', function(req, res, next) {
   res.redirect('/login')
@@ -53,8 +59,14 @@ router.post('/register', function(req, res, next) {
 })
 
 
+router.use('/logout', function(req, res, next) {
+  req.logout();
+  res.redirect('/')
+})
 
-router.get('/search', function(req, res, next) {
+
+
+router.get('/search', isLoggedIn, function(req, res, next) {
   console.log(req.query)
   if (req.query.query === '') {
     console.log('no result')
@@ -73,22 +85,27 @@ router.get('/search', function(req, res, next) {
       page: req.query.page
     })
   } else {
-    res.render('./user/home', {
-      layout: 'main',
-      css: '/assets/css/main_search.css',
-      login: req.isAuthenticated(),
-      query: req.query.query,
-      fromDate: req.query.fromDate,
-      toDate: req.query.toDate,
-      fromTime: req.query.fromTime,
-      toTime: req.query.toTime,
-      type: req.query.type,
-      available: req.query.available,
-      rows: req.query.rows,
-      page: req.query.page
+    item.search(req.query, function(data) {
+      res.render('./user/home', {
+        layout: 'main',
+        css: '/assets/css/main_search.css',
+        login: req.isAuthenticated(),
+        query: req.query.query,
+        fromDate: req.query.fromDate,
+        toDate: req.query.toDate,
+        fromTime: req.query.fromTime,
+        toTime: req.query.toTime,
+        type: req.query.type,
+        available: req.query.available,
+        rows: req.query.rows,
+        page: req.query.page,
+        searchData: data
+      })
     })
   }
 })
+
+
 
 
 router.post('/item', function(req, res, next) {
